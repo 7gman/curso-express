@@ -1,8 +1,14 @@
 const express = require('express');
-const { send } = require('express/lib/response');
+const req = require('express/lib/request');
 const app = express();
 
+function logger(req, res, next){
+    console.log("Request recibido");
+    next();
+};
+
 app.use(express.json());
+app.use(logger);
 
 app.all('/user/', (req, res, next) => {
     console.log('Por aquí pasó');
@@ -19,16 +25,14 @@ app.get('/user', (req, res) => {
 app.post('/user/:id', (req, res) => {
     console.log(req.body);
     console.log(req.params);
-    res.send(`User ${req.params.id} agregado en localhost`);
+    res.send(`Post request recibido`);
 });
 
-app.put('/put/:id', (req, res) => {
+app.put('/user/:id', (req, res) => {
     console.log(req.body);
-    let id_2 = req.params.id;
-    id_2 = '123';
     req.params.id = '000';
 
-    res.send(`Usuario ${req.params.id} actualizado al número ${id_2}` );
+    res.send(`Usuario ${req.params.id} actualizado` );
     console.log(req.params.id);
 });
 
